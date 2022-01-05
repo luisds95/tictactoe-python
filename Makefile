@@ -5,7 +5,7 @@ lint:
 	black tictactoe tests
 	isort tictactoe tests
 	python -m flake8 tictactoe tests
-	mypy tictactoe
+	mypy tictactoe tests
 
 test:
 	pytest tests

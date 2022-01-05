@@ -1,31 +1,35 @@
+from collections import Counter
+
 from tictactoe.game.exceptions import InvalidBoardError
 
 
 class Board:
-    def __init__(self) -> None:
-        self.state = "000000000"
+    def __init__(self, state: str = None) -> None:
+        self.state = "000000000" if state is None else state
+        self.moves = self.get_moves()
+        self.validate_state()
+        self.next_player = self.get_next_player()
 
     def __str__(self) -> str:
         return self.state
 
-    def load_state(self, state: str) -> None:
-        self.validate_state(state)
-        self.state = state
-
-    @staticmethod
-    def validate_state(state: str) -> None:
-        if len(state) != 9:
+    def validate_state(self) -> None:
+        if len(self.state) != 9:
             raise InvalidBoardError("Invalid length of board")
 
-        ones = 0
-        twos = 0
-        for char in state:
-            if char == "1":
-                ones += 1
-            elif char == "2":
-                twos += 1
-            elif char != "0":
-                raise InvalidBoardError(f"Invalid character in board: {char}")
+        chars_in_state = set(self.moves.keys())
+        valid_chars = set("012")
+        if chars_in_state.difference(valid_chars):
+            raise InvalidBoardError("Invalid character in board")
 
-        if not (ones == twos or ones == (twos + 1)):
+        if not (
+            self.moves["1"] == self.moves["2"]
+            or self.moves["1"] == (self.moves["2"] + 1)
+        ):
             raise InvalidBoardError("Unreachable position")
+
+    def get_moves(self) -> dict:
+        return Counter(self.state)
+
+    def get_next_player(self) -> int:
+        return int(self.moves["1"] != self.moves["2"]) + 1
