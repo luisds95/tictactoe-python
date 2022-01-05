@@ -1,24 +1,31 @@
-from typing import Union
+from tictactoe.game.exceptions import InvalidBoardError
 
 
 class Board:
     def __init__(self) -> None:
-        self.state = 0
+        self.state = "000000000"
 
     def __str__(self) -> str:
-        return self.to_str()
+        return self.state
 
-    def to_str(self) -> str:
-        return f"{self.state:09b}"
-
-    def load_state(self, state: Union[str, int]) -> None:
-        if isinstance(state, int):
-            self.load_int_state(state)
-        else:
-            self.load_str_state(state)
-
-    def load_int_state(self, state: int) -> None:
+    def load_state(self, state: str) -> None:
+        self.validate_state(state)
         self.state = state
 
-    def load_str_state(self, state: str) -> None:
-        self.state = eval(f"0b{state}")
+    @staticmethod
+    def validate_state(state: str) -> None:
+        if len(state) != 9:
+            raise InvalidBoardError("Invalid length of board")
+
+        ones = 0
+        twos = 0
+        for char in state:
+            if char == "1":
+                ones += 1
+            elif char == "2":
+                twos += 1
+            elif char != "0":
+                raise InvalidBoardError(f"Invalid character in board: {char}")
+
+        if not (ones == twos or ones == (twos + 1)):
+            raise InvalidBoardError("Unreachable position")

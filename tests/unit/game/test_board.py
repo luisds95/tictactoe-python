@@ -1,5 +1,6 @@
 import pytest
-from tictactoe.game.board import Board
+
+from tictactoe.game import Board, InvalidBoardError
 
 
 @pytest.fixture
@@ -8,20 +9,24 @@ def board():
 
 
 def test_initial_state_of_board(board: Board):
-    assert str(board) == '000000000'
+    assert str(board) == "000000000"
 
 
 @pytest.mark.parametrize(
-    "int_state,str_state",
-    [[511, '111111111'], [256, '100000000'], [32, '000100000']]
+    "state,success",
+    [
+        ["111111111", False],
+        ["10000000", False],
+        ["000000o00", False],
+        ["000000000", True],
+        ["001002001", True],
+        ["001210120", True],
+    ],
 )
-def test_load_state(int_state: int, str_state: str, board: Board):
-    board.load_state(int_state)
-    assert board.to_str() == str_state
-
-    board.load_state(0)
-    assert board.state == 0
-
-    board.load_state(str_state)
-    assert board.state == int_state
-    
+def test_load_state(state: str, success: bool, board: Board):
+    if success:
+        board.load_state(state)
+        assert str(board) == state
+    else:
+        with pytest.raises(InvalidBoardError):
+            board.load_state(state)
