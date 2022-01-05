@@ -8,3 +8,7 @@ class BoardError(GameError):
 
 class InvalidBoardError(BoardError):
     pass
+
+
+class InvalidMoveError(BoardError):
+    pass
