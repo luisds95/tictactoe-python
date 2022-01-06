@@ -1,6 +1,6 @@
 import pytest
 
-from tictactoe.game import Board, InvalidBoardError, InvalidMoveError
+from tictactoe.game import Board, GameOutcome, InvalidBoardError, InvalidMoveError
 
 
 def test_initial_state_of_board():
@@ -49,9 +49,12 @@ def test_next_player_updates_when_loading_state(state: str, next_player: str):
         [5, True, "120000000", "120001000"],
         [0, False, "100000000", "100000000"],
         [9, False, "100000000", "100000000"],
+        [5, False, "102100102", "102100102"],
     ],
 )
-def test_move(move: int, should_succeed: bool, original_state: str, new_state: str):
+def test_make_move(
+    move: int, should_succeed: bool, original_state: str, new_state: str
+):
     board = Board(original_state)
     if should_succeed:
         board.make_move(move)
@@ -59,3 +62,27 @@ def test_move(move: int, should_succeed: bool, original_state: str, new_state: s
     else:
         with pytest.raises(InvalidMoveError):
             board.make_move(move)
+
+
+@pytest.mark.parametrize(
+    "state,expected_winner",
+    [
+        ["000000000", GameOutcome.NA],
+        ["121120000", GameOutcome.NA],
+        ["121121212", GameOutcome.DRAW],
+        ["122120100", GameOutcome.P1],
+        ["021021120", GameOutcome.P2],
+        ["111202000", GameOutcome.P1],
+        ["101222100", GameOutcome.P2],
+        ["122012101", GameOutcome.P1],
+        ["112120200", GameOutcome.P2],
+    ],
+)
+def test_outcome(state: str, expected_winner: GameOutcome):
+    board = Board(state)
+    assert board.outcome == expected_winner
+
+
+def test_print_can_execute():
+    board = Board("112120200")
+    board.print()

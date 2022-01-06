@@ -12,3 +12,7 @@ class InvalidBoardError(BoardError):
 
 class InvalidMoveError(BoardError):
     pass
+
+
+class NoWinnerError(GameError):
+    pass
