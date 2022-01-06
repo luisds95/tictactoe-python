@@ -50,7 +50,11 @@ class Board:
         self.outcome = self._get_outcome()
 
     def is_valid_move(self, move: int) -> bool:
-        return 0 <= move < len(self.state) and not self.is_finished() and self.state[move] == "0"
+        return (
+            0 <= move < len(self.state)
+            and not self.is_finished()
+            and self.state[move] == "0"
+        )
 
     def is_full(self) -> bool:
         return self.moves.get("0", 0) == 0
@@ -95,7 +99,6 @@ class Board:
 
     def search_for_winner_in_rows(self) -> str:
         for row in range(0, N_ROWS ** 2, N_ROWS):
-            print(self.state[row : row + 3])
             if self.state[row] == self.state[row + 1] == self.state[row + 2]:
                 return self.state[row]
         return "0"

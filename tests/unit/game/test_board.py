@@ -77,6 +77,17 @@ def test_make_move(
         ["122012101", GameOutcome.P1],
         ["112120200", GameOutcome.P2],
     ],
+    ids=[
+        "empty",
+        "ongoing",
+        "no-winner",
+        "vertical-p1",
+        "vertical-p2",
+        "horizonal-p1",
+        "horizontal-p2",
+        "right-diagonal",
+        "left-diagonal",
+    ],
 )
 def test_outcome(state: str, expected_winner: GameOutcome):
     board = Board(state)
