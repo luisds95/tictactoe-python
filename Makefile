@@ -2,12 +2,12 @@ install:
 	poetry install
 
 lint:
-	black tictactoe tests
-	isort tictactoe tests
-	python -m flake8 tictactoe tests
-	mypy tictactoe tests
+	poetry run black tictactoe tests
+	poetry run isort tictactoe tests
+	poetry run python -m flake8 tictactoe tests
+	poetry run mypy tictactoe tests
 
 test:
-	pytest tests
+	poetry run pytest tests
 
 precommit: lint test

@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional, Union
 
+from tictactoe.agent.enums import AgentTypes
 from tictactoe.agent.exceptions import NoValidMovesError
 from tictactoe.game import Board
 
@@ -21,4 +22,8 @@ class Agent(ABC):
 
     @abstractmethod
     def _get_action(self, board: Board) -> int:
+        pass
+
+    @abstractmethod
+    def get_agent_type(self) -> AgentTypes:
         pass

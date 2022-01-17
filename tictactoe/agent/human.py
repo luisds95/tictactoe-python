@@ -1,4 +1,5 @@
 from tictactoe.agent.base import Agent
+from tictactoe.agent.enums import AgentTypes
 from tictactoe.game import Board
 
 
@@ -12,3 +13,6 @@ class HumanAgent(Agent):
                 print("Invalid index. Try again...")
                 answer = None
         return int(answer)
+
+    def get_agent_type(self) -> AgentTypes:
+        return AgentTypes.human

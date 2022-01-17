@@ -82,34 +82,37 @@ class Board:
         ]
         for func in funcs:
             winner = func()
-            if winner != "0":
-                return GameOutcome.P1 if winner == "1" else GameOutcome.P2
+            if winner != GameOutcome.NA:
+                return winner
+
+        if self.is_full():
+            return GameOutcome.DRAW
 
         raise NoWinnerError
 
-    def search_for_winner_in_columns(self) -> str:
+    def search_for_winner_in_columns(self) -> GameOutcome:
         for column in range(N_ROWS):
             if (
                 self.state[column]
                 == self.state[column + N_ROWS]
                 == self.state[column + N_ROWS * 2]
             ):
-                return self.state[column]
-        return "0"
+                return GameOutcome(self.state[column])
+        return GameOutcome.NA
 
-    def search_for_winner_in_rows(self) -> str:
+    def search_for_winner_in_rows(self) -> GameOutcome:
         for row in range(0, N_ROWS ** 2, N_ROWS):
             if self.state[row] == self.state[row + 1] == self.state[row + 2]:
-                return self.state[row]
-        return "0"
+                return GameOutcome(self.state[row])
+        return GameOutcome.NA
 
-    def search_for_winner_in_diagonals(self) -> str:
+    def search_for_winner_in_diagonals(self) -> GameOutcome:
         if (
             self.state[0] == self.state[4] == self.state[8]
             or self.state[2] == self.state[4] == self.state[6]
         ):
-            return self.state[4]
-        return "0"
+            return GameOutcome(self.state[4])
+        return GameOutcome.NA
 
     def print(self):
         state_map = {"1": "X", "2": "O", "0": " "}
