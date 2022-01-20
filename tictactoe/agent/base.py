@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod, abstractproperty
 from typing import Optional, Union
 
 from tictactoe.agent.enums import AgentTypes
@@ -24,6 +24,6 @@ class Agent(ABC):
     def _get_action(self, board: Board) -> int:
         pass
 
-    @abstractmethod
-    def get_agent_type(self) -> AgentTypes:
+    @abstractproperty
+    def agent_type(self) -> AgentTypes:
         pass

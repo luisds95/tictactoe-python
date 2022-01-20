@@ -14,5 +14,6 @@ class HumanAgent(Agent):
                 answer = None
         return int(answer)
 
-    def get_agent_type(self) -> AgentTypes:
+    @property
+    def agent_type(self) -> AgentTypes:
         return AgentTypes.human

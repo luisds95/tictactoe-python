@@ -10,5 +10,6 @@ class RandomAgent(Agent):
         indices = [idx for idx, value in enumerate(board.state) if value == "0"]
         return indices[random.randint(0, len(indices) - 1)]
 
-    def get_agent_type(self) -> AgentTypes:
+    @property
+    def agent_type(self) -> AgentTypes:
         return AgentTypes.random

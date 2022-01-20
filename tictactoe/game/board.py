@@ -1,3 +1,4 @@
+import logging
 from collections import Counter
 from typing import Union
 
@@ -16,7 +17,16 @@ class Board:
         self.outcome = self._get_outcome()
 
     def __str__(self) -> str:
-        return "".join(self.state)
+        state_map = {"1": "X", "2": "O", "0": " "}
+        mapped_state = [state_map[char] for char in self.state]
+        printable = "\n"
+        for row in range(N_ROWS):
+            idx = row * N_ROWS
+            row_values = " | ".join(mapped_state[idx : idx + N_ROWS])
+            printable += row_values
+            if row != N_ROWS - 1:
+                printable += "\n" + "-" * len(row_values) + "\n"
+        return printable
 
     def get_moves(self) -> dict:
         return Counter(self.state)
@@ -114,14 +124,5 @@ class Board:
             return GameOutcome(self.state[4])
         return GameOutcome.NA
 
-    def print(self):
-        state_map = {"1": "X", "2": "O", "0": " "}
-        mapped_state = [state_map[char] for char in self.state]
-        printable = ""
-        for row in range(N_ROWS):
-            idx = row * N_ROWS
-            row_values = " | ".join(mapped_state[idx : idx + N_ROWS])
-            printable += row_values
-            if row != N_ROWS - 1:
-                printable += "\n" + "-" * len(row_values) + "\n"
-        print(printable)
+    def log(self, level: int = logging.DEBUG) -> None:
+        logging.log(level, str(self))
