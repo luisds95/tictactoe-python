@@ -2,8 +2,8 @@ import logging
 from collections import Counter
 from typing import Union
 
-from tictactoe.game.enums import GameOutcome
-from tictactoe.game.exceptions import InvalidBoardError, InvalidMoveError, NoWinnerError
+from tictactoe.environment.enums import GameOutcome
+from tictactoe.environment.exceptions import InvalidBoardError, InvalidMoveError, NoWinnerError
 
 N_ROWS = 3
 

@@ -1,11 +1,11 @@
 import pytest
 
-from tictactoe.game import Board, GameOutcome, InvalidBoardError, InvalidMoveError
+from tictactoe.environment import Board, GameOutcome, InvalidBoardError, InvalidMoveError
 
 
 def test_initial_state_of_board():
     board = Board()
-    assert str(board) == "000000000"
+    assert board.state == list("000000000")
     assert board.next_player == "1"
 
 
@@ -19,7 +19,7 @@ def test_initial_state_of_board():
 )
 def test_board_loads_correct_states(state: str):
     board = Board(state)
-    assert str(board) == state
+    assert board.state == list(state)
 
 
 @pytest.mark.parametrize(
@@ -58,7 +58,7 @@ def test_make_move(
     board = Board(original_state)
     if should_succeed:
         board.make_move(move)
-        assert str(board) == new_state
+        assert board.state == list(new_state)
     else:
         with pytest.raises(InvalidMoveError):
             board.make_move(move)
@@ -96,4 +96,4 @@ def test_outcome(state: str, expected_winner: GameOutcome):
 
 def test_print_can_execute():
     board = Board("112120200")
-    board.print()
+    board.log()

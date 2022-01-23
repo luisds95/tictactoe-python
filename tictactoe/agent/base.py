@@ -3,7 +3,7 @@ from typing import Optional, Union
 
 from tictactoe.agent.enums import AgentTypes
 from tictactoe.agent.exceptions import NoValidMovesError
-from tictactoe.game import Board
+from tictactoe.environment import Board
 
 
 class Agent(ABC):

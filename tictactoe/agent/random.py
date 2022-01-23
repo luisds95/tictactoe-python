@@ -2,7 +2,7 @@ import random
 
 from tictactoe.agent.base import Agent
 from tictactoe.agent.enums import AgentTypes
-from tictactoe.game import Board
+from tictactoe.environment import Board
 
 
 class RandomAgent(Agent):

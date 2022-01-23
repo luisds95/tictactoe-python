@@ -1,8 +1,7 @@
 import logging
 
 from tictactoe.agent import Agent, AgentTypes, HumanAgent, RandomAgent
-from tictactoe.game.board import Board
-from tictactoe.game.enums import GameOutcome
+from tictactoe.environment import Board, GameOutcome
 
 
 def play_games(p1: str, p2: str, n: int = 1) -> None:
