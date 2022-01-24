@@ -1,6 +1,6 @@
 import logging
 from collections import Counter
-from typing import Union
+from typing import Union, List
 
 from tictactoe.environment.enums import GameOutcome
 from tictactoe.environment.exceptions import InvalidBoardError, InvalidMoveError, NoWinnerError
@@ -48,6 +48,14 @@ class Board:
 
     def get_next_player(self) -> str:
         return str(int(self.moves["1"] != self.moves["2"]) + 1)
+
+    def make_move_on_copy(self, move: int) -> "Board":
+        copy = self.copy()
+        copy.make_move(move)
+        return copy
+
+    def copy(self) -> "Board":
+        return Board(self.state)
 
     def make_move(self, move: int) -> None:
         if not self.is_valid_move(move):
@@ -126,3 +134,6 @@ class Board:
 
     def log(self, level: int = logging.DEBUG) -> None:
         logging.log(level, str(self))
+
+    def get_valid_moves(self) -> List[int]:
+        return [idx for idx, value in enumerate(self.state) if value == "0"]

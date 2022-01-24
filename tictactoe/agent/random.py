@@ -7,7 +7,7 @@ from tictactoe.environment import Board
 
 class RandomAgent(Agent):
     def _get_action(self, board: Board) -> int:
-        indices = [idx for idx, value in enumerate(board.state) if value == "0"]
+        indices = board.get_valid_moves()
         return indices[random.randint(0, len(indices) - 1)]
 
     @property

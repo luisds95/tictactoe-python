@@ -1,4 +1,5 @@
 import pytest
+from typing import List
 
 from tictactoe.environment import Board, GameOutcome, InvalidBoardError, InvalidMoveError
 
@@ -94,6 +95,28 @@ def test_outcome(state: str, expected_winner: GameOutcome):
     assert board.outcome == expected_winner
 
 
-def test_print_can_execute():
+def test_log_can_execute():
     board = Board("112120200")
     board.log()
+
+
+@pytest.mark.parametrize(
+    "state,expected",
+    [
+        ["000000000", list(range(9))],
+        ["121000212", [3, 4, 5]],
+        ["012121212", [0]],
+    ]
+)
+def test_get_valid_moves_is_correct(state: str, expected: List[int]):
+    board = Board(state)
+    valid_moves = board.get_valid_moves()
+    assert valid_moves == expected
+
+
+def test_make_move_on_copy():
+    board = Board("010020000")
+    copy = board.make_move_on_copy(2)
+
+    assert board.state == list("010020000")
+    assert copy.state == list("011020000")
