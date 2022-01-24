@@ -4,3 +4,7 @@ class AgentError(Exception):
 
 class NoValidMovesError(AgentError):
     pass
+
+
+class PlayerNumberNotSetError(AgentError):
+    pass

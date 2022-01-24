@@ -1,7 +1,13 @@
-import pytest
 from typing import List
 
-from tictactoe.environment import Board, GameOutcome, InvalidBoardError, InvalidMoveError
+import pytest
+
+from tictactoe.environment import (
+    Board,
+    GameOutcome,
+    InvalidBoardError,
+    InvalidMoveError,
+)
 
 
 def test_initial_state_of_board():
@@ -106,7 +112,7 @@ def test_log_can_execute():
         ["000000000", list(range(9))],
         ["121000212", [3, 4, 5]],
         ["012121212", [0]],
-    ]
+    ],
 )
 def test_get_valid_moves_is_correct(state: str, expected: List[int]):
     board = Board(state)

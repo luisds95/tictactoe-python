@@ -23,7 +23,7 @@ def get_agent(name: str) -> Agent:
     return agent
 
 
-def play_and_print_result(p1_agent: Agent, p2_agent: Agent):  
+def play_and_print_result(p1_agent: Agent, p2_agent: Agent):
     board = play_game(p1_agent, p2_agent)
     print_game_result(board)
 
