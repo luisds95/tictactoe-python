@@ -32,3 +32,17 @@ class Agent(ABC):
     @abstractproperty
     def agent_type(self) -> AgentTypes:
         pass
+
+
+class TrainableAgent(Agent):
+    @abstractmethod
+    def load_data(self) -> None:
+        pass
+
+    @abstractmethod
+    def save_data(self) -> None:
+        pass
+
+    @abstractmethod
+    def train(self) -> None:
+        pass

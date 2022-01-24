@@ -1,26 +1,46 @@
+from pathlib import Path
 from typing import Dict, Union
 
 import numpy as np
+import json
 
-from tictactoe.agent.base import Agent
+from tictactoe.agent.base import TrainableAgent
 from tictactoe.agent.enums import AgentTypes
 from tictactoe.environment import Board, GameOutcome
 
 
-class ExhaustiveSearchAgent(Agent):
+class ExhaustiveSearchAgent(TrainableAgent):
     WIN_REWARD = 1
     DRAW_REWARD = 0
     LOSE_REWARD = -1
 
-    def __init__(self, player_number: Union[int, str], max_depth: int = -1) -> None:
+    def __init__(self, player_number: Union[int, str], data_path: Path, max_depth: int = -1) -> None:
         super().__init__()
         self.max_depth = max_depth
+        self.data_path = data_path
+        self.data = {}
+
         self.set_player_number(player_number)
 
     def agent_type(self) -> AgentTypes:
         return AgentTypes.searcher
 
+    def load_data(self) -> None:
+        with open(self.data_path) as stream:
+            self.data = json.load(stream)
+
+    def save_data(self) -> None:
+        with open(self.data_path, "w") as stream:
+            json.dump(self.data, stream)
+
+    def train(self) -> None:
+        return super().train()
+
     def _get_action(self, board: Board) -> int:
+        board_str_state = board.get_str_state()
+        if board_str_state in self.data:
+            return self.data[board_str_state]
+
         values = self.evaluate_moves(board)
         return max(values, key=lambda move: values[move])
 
@@ -58,6 +78,10 @@ class ExhaustiveSearchAgent(Agent):
                 values[move] = self.LOSE_REWARD
 
         return values
+
+    def _save_values(self, board: Board, values: Dict[int, int]):
+        # This will be called by _evaluate_moves
+        pass
 
     def print_sequence(self, board: Board) -> None:
         board = board.copy()

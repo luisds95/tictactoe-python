@@ -1,6 +1,7 @@
 import logging
 from collections import Counter
 from typing import List, Union
+from math import factorial
 
 from tictactoe.environment.enums import GameOutcome
 from tictactoe.environment.exceptions import (
@@ -13,6 +14,8 @@ N_ROWS = 3
 
 
 class Board:
+    TOTAL_POSITIONS = factorial(9)
+
     def __init__(self, state: Union[list, str] = None) -> None:
         self.state = list("000000000") if state is None else list(state)
         self.moves = self.get_moves()
@@ -31,6 +34,9 @@ class Board:
             if row != N_ROWS - 1:
                 printable += "\n" + "-" * len(row_values) + "\n"
         return printable
+
+    def get_str_state(self) -> str:
+        return "".join(self.state)
 
     def get_moves(self) -> dict:
         return Counter(self.state)
