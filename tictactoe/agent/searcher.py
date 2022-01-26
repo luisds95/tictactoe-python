@@ -1,8 +1,6 @@
-from pathlib import Path
 from typing import Dict, Union
 
 import numpy as np
-import json
 
 from tictactoe.agent.base import TrainableAgent
 from tictactoe.agent.enums import AgentTypes
@@ -15,26 +13,19 @@ class ExhaustiveSearchAgent(TrainableAgent):
     DRAW_REWARD = 0
     LOSE_REWARD = -1
 
-    def __init__(self, player_number: Union[int, str], db: Database,  max_depth: int = -1) -> None:
-        super().__init__()
+    def __init__(self, db: Database, player_number: Union[int, str], max_depth: int = -1, commit_freq: int = 1000) -> None:
+        super().__init__(db)
         self.max_depth = max_depth
-        self.db = db
+        self.commit_freq = commit_freq
 
         self.set_player_number(player_number)
 
     def agent_type(self) -> AgentTypes:
         return AgentTypes.searcher
 
-    def load_data(self) -> None:
-        with open(self.data_path) as stream:
-            self.data = json.load(stream)
-
-    def save_data(self) -> None:
-        with open(self.data_path, "w") as stream:
-            json.dump(self.data, stream)
-
-    def train(self) -> None:
-        return super().train()
+    def _train(self) -> None:
+        self.get_action(Board()) 
+        self.db.commit()
 
     def _get_action(self, board: Board) -> int:
         board_str_state = board.get_str_state()
@@ -77,11 +68,15 @@ class ExhaustiveSearchAgent(TrainableAgent):
             else:
                 values[move] = self.LOSE_REWARD
 
+        if self.is_training:
+            self._update_database(board, values)
+
         return values
 
-    def _save_values(self, board: Board, values: Dict[int, int]):
-        # This will be called by _evaluate_moves
-        pass
+    def _update_database(self, board: Board, values: Dict[int, int]) -> None:
+        self.db.update(board, values)
+        if self.db.size() % self.commit_freq == 0:
+            self.db.commit()
 
     def print_sequence(self, board: Board) -> None:
         board = board.copy()
