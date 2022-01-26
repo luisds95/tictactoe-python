@@ -3,8 +3,8 @@ from typing import Optional, Union
 
 from tictactoe.agent.enums import AgentTypes
 from tictactoe.agent.exceptions import NoValidMovesError, PlayerNumberNotSetError
-from tictactoe.environment import Board, GameOutcome
 from tictactoe.database import Database
+from tictactoe.environment import Board, GameOutcome
 
 
 class Agent(ABC):
@@ -40,14 +40,6 @@ class TrainableAgent(Agent):
         super().__init__()
         self.db = db
         self.is_training = False
-
-    @abstractmethod
-    def load_data(self) -> None:
-        pass
-
-    @abstractmethod
-    def save_data(self) -> None:
-        pass
 
     def train(self) -> None:
         self.is_training = True

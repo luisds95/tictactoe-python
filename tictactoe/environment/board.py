@@ -1,7 +1,7 @@
 import logging
 from collections import Counter
-from typing import List, Union
 from math import factorial
+from typing import List, Union
 
 from tictactoe.environment.enums import GameOutcome
 from tictactoe.environment.exceptions import (
@@ -22,6 +22,9 @@ class Board:
         self.validate_state()
         self.next_player = self.get_next_player()
         self.outcome = self._get_outcome()
+
+    def __eq__(self, __o: object) -> bool:
+        return isinstance(__o, Board) and __o.state == self.state
 
     def __str__(self) -> str:
         state_map = {"1": "X", "2": "O", "0": " "}

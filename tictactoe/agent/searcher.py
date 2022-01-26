@@ -4,8 +4,8 @@ import numpy as np
 
 from tictactoe.agent.base import TrainableAgent
 from tictactoe.agent.enums import AgentTypes
-from tictactoe.environment import Board, GameOutcome
 from tictactoe.database import Database
+from tictactoe.environment import Board, GameOutcome
 
 
 class ExhaustiveSearchAgent(TrainableAgent):
@@ -13,7 +13,13 @@ class ExhaustiveSearchAgent(TrainableAgent):
     DRAW_REWARD = 0
     LOSE_REWARD = -1
 
-    def __init__(self, db: Database, player_number: Union[int, str], max_depth: int = -1, commit_freq: int = 1000) -> None:
+    def __init__(
+        self,
+        db: Database,
+        player_number: Union[int, str],
+        max_depth: int = -1,
+        commit_freq: int = 1000,
+    ) -> None:
         super().__init__(db)
         self.max_depth = max_depth
         self.commit_freq = commit_freq
@@ -24,15 +30,14 @@ class ExhaustiveSearchAgent(TrainableAgent):
         return AgentTypes.searcher
 
     def _train(self) -> None:
-        self.get_action(Board()) 
+        self.get_action(Board())
         self.db.commit()
 
     def _get_action(self, board: Board) -> int:
-        board_str_state = board.get_str_state()
-        if board_str_state in self.data:
-            return self.data[board_str_state]
+        values = self.db.get(board)
+        if values is None:
+            values = self.evaluate_moves(board)
 
-        values = self.evaluate_moves(board)
         return max(values, key=lambda move: values[move])
 
     def evaluate_moves(self, board: Board) -> Dict[int, int]:

@@ -1,8 +1,10 @@
 from typing import Dict
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 from tictactoe.agent.searcher import ExhaustiveSearchAgent
+from tictactoe.database import InMemoryDatabase
 from tictactoe.environment import Board
 
 
@@ -19,7 +21,8 @@ def test_exhaustive_search_agent_evaluates_moves_correctly(
     state: str, expected: Dict[int, int]
 ):
     board = Board(state)
-    agent = ExhaustiveSearchAgent(board.next_player)
+    db = InMemoryDatabase()
+    agent = ExhaustiveSearchAgent(db, board.next_player)
 
     values = agent.evaluate_moves(board)
 
@@ -36,15 +39,19 @@ def test_exhaustive_search_agent_evaluates_moves_correctly(
 )
 def test_exhaustive_search_agent_gets_best_action(state: str, expected: int):
     board = Board(state)
-    agent = ExhaustiveSearchAgent(board.next_player)
+    db = InMemoryDatabase()
+    agent = ExhaustiveSearchAgent(db, board.next_player)
 
     action = agent.get_action(board)
 
     assert action == expected
 
 
-def test_exhaustive_search_agent_can_train():
-    board = Board("010221100")
-    agent = ExhaustiveSearchAgent(board.next_player)
+@patch.object(ExhaustiveSearchAgent, "get_action")
+def test_exhaustive_search_agent_can_train(mock_get_action: MagicMock):
+    db = InMemoryDatabase()
+    board = Board()
+    agent = ExhaustiveSearchAgent(db, board.next_player)
 
     agent.train()
+    mock_get_action.assert_called_once_with(board)
