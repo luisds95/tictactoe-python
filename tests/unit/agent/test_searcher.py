@@ -34,10 +34,17 @@ def test_exhaustive_search_agent_evaluates_moves_correctly(
         ["010221000", 2],
     ],
 )
-def test_ehaustive_search_agent_gets_best_action(state: str, expected: int):
+def test_exhaustive_search_agent_gets_best_action(state: str, expected: int):
     board = Board(state)
     agent = ExhaustiveSearchAgent(board.next_player)
 
     action = agent.get_action(board)
 
     assert action == expected
+
+
+def test_exhaustive_search_agent_can_train():
+    board = Board("010221100")
+    agent = ExhaustiveSearchAgent(board.next_player)
+
+    agent.train()

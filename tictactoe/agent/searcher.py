@@ -7,6 +7,7 @@ import json
 from tictactoe.agent.base import TrainableAgent
 from tictactoe.agent.enums import AgentTypes
 from tictactoe.environment import Board, GameOutcome
+from tictactoe.database import Database
 
 
 class ExhaustiveSearchAgent(TrainableAgent):
@@ -14,11 +15,10 @@ class ExhaustiveSearchAgent(TrainableAgent):
     DRAW_REWARD = 0
     LOSE_REWARD = -1
 
-    def __init__(self, player_number: Union[int, str], data_path: Path, max_depth: int = -1) -> None:
+    def __init__(self, player_number: Union[int, str], db: Database,  max_depth: int = -1) -> None:
         super().__init__()
         self.max_depth = max_depth
-        self.data_path = data_path
-        self.data = {}
+        self.db = db
 
         self.set_player_number(player_number)
 
