@@ -5,6 +5,7 @@ from tictactoe.agent.enums import AgentTypes
 from tictactoe.agent.exceptions import NoValidMovesError, PlayerNumberNotSetError
 from tictactoe.database import Database
 from tictactoe.environment import Board, GameOutcome
+from tictactoe.log import TrainingLogger
 
 
 class Agent(ABC):
@@ -36,16 +37,22 @@ class Agent(ABC):
 
 
 class TrainableAgent(Agent):
-    def __init__(self, db: Database) -> None:
+    def __init__(self, db: Database, logger: TrainingLogger = None) -> None:
         super().__init__()
         self.db = db
         self.is_training = False
+        self.logger = TrainingLogger(frequency=0) if logger is None else logger
 
-    def train(self) -> None:
+    def train(self, board: Board = None) -> int:
         self.is_training = True
-        self._train()
+        self.logger.start_training()
+
+        action = self._train(board)
+        
         self.is_training = False
 
+        return action
+
     @abstractmethod
-    def _train(self) -> None:
+    def _train(self, board: Board = None) -> int:
         pass

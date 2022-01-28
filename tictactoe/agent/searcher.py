@@ -6,6 +6,7 @@ from tictactoe.agent.base import TrainableAgent
 from tictactoe.agent.enums import AgentTypes
 from tictactoe.database import Database
 from tictactoe.environment import Board, GameOutcome
+from tictactoe.log import TrainingLogger
 
 
 class ExhaustiveSearchAgent(TrainableAgent):
@@ -15,12 +16,13 @@ class ExhaustiveSearchAgent(TrainableAgent):
 
     def __init__(
         self,
-        db: Database,
+        db: Database,        
         player_number: Union[int, str],
+        logger: TrainingLogger = None, 
         max_depth: int = -1,
         commit_freq: int = 1000,
     ) -> None:
-        super().__init__(db)
+        super().__init__(db, logger=logger)
         self.max_depth = max_depth
         self.commit_freq = commit_freq
 
@@ -29,9 +31,11 @@ class ExhaustiveSearchAgent(TrainableAgent):
     def agent_type(self) -> AgentTypes:
         return AgentTypes.searcher
 
-    def _train(self) -> None:
-        self.get_action(Board())
+    def _train(self, board: Board = None) -> int:
+        board = Board() if board is None else board
+        action = self.get_action(board)
         self.db.commit()
+        return action
 
     def _get_action(self, board: Board) -> int:
         values = self.db.get(board)
@@ -82,6 +86,7 @@ class ExhaustiveSearchAgent(TrainableAgent):
         self.db.update(board, values)
         if self.db.size() % self.commit_freq == 0:
             self.db.commit()
+        self.logger.log_state()
 
     def print_sequence(self, board: Board) -> None:
         board = board.copy()

@@ -1,23 +1,26 @@
 import logging
 
-from tictactoe.agent import Agent, AgentTypes, HumanAgent, RandomAgent
+from tictactoe.agent import Agent, AgentTypes, HumanAgent, RandomAgent, ExhaustiveSearchAgent
 from tictactoe.environment import Board, GameOutcome
+from tictactoe.log import TrainingLogger
 
 
-def play_games(p1: str, p2: str, n: int = 1) -> None:
-    p1_agent = get_agent(p1)
-    p2_agent = get_agent(p2)
+def play_games(p1: str, p2: str, n: int = 1, train: bool = False, database: str = None) -> None:
+    p1_agent = get_agent(p1, number=1)
+    p2_agent = get_agent(p2, number=2)
 
     for _ in range(n):
         play_and_print_result(p1_agent, p2_agent)
 
 
-def get_agent(name: str) -> Agent:
+def get_agent(name: str, number: int, database: str = None) -> Agent:
     name = name.lower()
     if name == AgentTypes.human.value:
         agent: Agent = HumanAgent()
     elif name == AgentTypes.random.value:
         agent = RandomAgent()
+    elif name == AgentTypes.searcher.value:
+        agent = ExhaustiveSearchAgent(database, number)
     else:
         raise ValueError(f"No agent {name}")
     return agent

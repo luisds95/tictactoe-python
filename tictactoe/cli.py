@@ -1,3 +1,4 @@
+from email.policy import default
 import logging
 
 import click
@@ -10,7 +11,9 @@ from tictactoe.game.play import play_games
 @click.argument("P2", default="random")
 @click.option("-n", default=1, help="Number of games to play", type=int)
 @click.option("--loud/--quiet", default=None, help="Level of verbosity")
-def main(p1: str, p2: str, n: int, loud: bool) -> None:
+@click.option("--train/--no-train", help="Should train non-human players")
+@click.option("--database", default="states.json", type=str)
+def play(p1: str, p2: str, n: int, loud: bool, train: bool, database: str) -> None:
     """
     Play a tic tac toe game. Possible players: human, random
     """
@@ -18,4 +21,4 @@ def main(p1: str, p2: str, n: int, loud: bool) -> None:
         logging.getLogger().setLevel(logging.DEBUG)
     else:
         logging.getLogger().setLevel(logging.INFO)
-    play_games(p1, p2, n=n)
+    play_games(p1, p2, n=n, train=train, database=database)
