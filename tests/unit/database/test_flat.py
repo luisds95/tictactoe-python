@@ -37,7 +37,7 @@ def test_dict_database_loads_some_data(data: dict):
 
 def test_dict_database_element_exists(data: dict):
     db = DictDatabase(Path())
-    db.data = data
+    db._data = data
 
     assert db.exists(Board(list(data)[0]))
     assert not db.exists(Board())
@@ -45,7 +45,7 @@ def test_dict_database_element_exists(data: dict):
 
 def test_dict_database_updates_data(data: dict):
     db = DictDatabase(Path())
-    db.data = data
+    db._data = data
 
     board = Board("010221100")
     new_data = {0: 0, 2: 0, 7: 1, 8: 0}
@@ -56,7 +56,7 @@ def test_dict_database_updates_data(data: dict):
 
 def test_dict_database_returns_correct_number_of_elements(data: dict):
     db = DictDatabase(Path())
-    db.data = data
+    db._data = data
 
     assert db.size() == 2
 

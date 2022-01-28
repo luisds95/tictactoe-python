@@ -1,5 +1,5 @@
 from typing import List
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -25,14 +25,14 @@ def test_logger_logs(
 ):
     messages = list("abcdefgh")
     logger = Logger(frequency=frequency)
-    logger.logger = MagicMock()
+    logger.handler = MagicMock()
     for message, force, result in zip(messages, should_force, should_log):
         logger.log(message, force=force)
         if result:
-            logger.logger.log.assert_called_once()
+            logger.handler.assert_called_once()
         else:
-            logger.logger.log.assert_not_called()
-        logger.logger.reset_mock()
+            logger.handler.assert_not_called()
+        logger.handler.reset_mock()
 
 
 def test_training_logger_logs_state():

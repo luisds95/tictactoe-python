@@ -16,9 +16,9 @@ class ExhaustiveSearchAgent(TrainableAgent):
 
     def __init__(
         self,
-        db: Database,        
+        db: Database,
         player_number: Union[int, str],
-        logger: TrainingLogger = None, 
+        logger: TrainingLogger = None,
         max_depth: int = -1,
         commit_freq: int = 1000,
     ) -> None:
@@ -42,7 +42,10 @@ class ExhaustiveSearchAgent(TrainableAgent):
         if values is None:
             values = self.evaluate_moves(board)
 
-        return max(values, key=lambda move: values[move])
+        if self.player_number == GameOutcome.P1:
+            return max(values, key=lambda move: values[move])
+        else:
+            return min(values, key=lambda move: values[move])
 
     def evaluate_moves(self, board: Board) -> Dict[int, int]:
         return self._evaluate_moves(board, current_depth=0)

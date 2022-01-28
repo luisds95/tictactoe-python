@@ -8,3 +8,7 @@ class NoValidMovesError(AgentError):
 
 class PlayerNumberNotSetError(AgentError):
     pass
+
+
+class AgentIsNotTrainableError(AgentError):
+    pass

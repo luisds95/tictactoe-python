@@ -1,54 +1,80 @@
-import logging
+from pathlib import Path
+from typing import Tuple
 
-from tictactoe.agent import Agent, AgentTypes, HumanAgent, RandomAgent, ExhaustiveSearchAgent
+from tictactoe.agent import (
+    Agent,
+    AgentTypes,
+    ExhaustiveSearchAgent,
+    HumanAgent,
+    RandomAgent,
+)
+from tictactoe.database import DictDatabase, InMemoryDatabase
 from tictactoe.environment import Board, GameOutcome
 from tictactoe.log import TrainingLogger
 
 
-def play_games(p1: str, p2: str, n: int = 1, train: bool = False, database: str = None) -> None:
-    p1_agent = get_agent(p1, number=1)
-    p2_agent = get_agent(p2, number=2)
+class Game:
+    def __init__(
+        self,
+        p1_name: str,
+        p2_name: str,
+        database_str: str = None,
+        logger: TrainingLogger = None,
+    ) -> None:
+        self.p1_name = p1_name.lower()
+        self.p2_name = p2_name.lower()
+        self.database = (
+            InMemoryDatabase()
+            if database_str is None
+            else DictDatabase(Path(database_str))
+        )
+        self.logger = TrainingLogger() if logger is None else logger
 
-    for _ in range(n):
-        play_and_print_result(p1_agent, p2_agent)
+        self.p1 = self.get_agent(1)
+        self.p2 = self.get_agent(2)
+        self.board = Board()
 
+    def play(self, n: int = 1) -> None:
+        for _ in range(n):
+            self._play_one()
+            self.print_result()
 
-def get_agent(name: str, number: int, database: str = None) -> Agent:
-    name = name.lower()
-    if name == AgentTypes.human.value:
-        agent: Agent = HumanAgent()
-    elif name == AgentTypes.random.value:
-        agent = RandomAgent()
-    elif name == AgentTypes.searcher.value:
-        agent = ExhaustiveSearchAgent(database, number)
-    else:
-        raise ValueError(f"No agent {name}")
-    return agent
+    def get_agent(self, number: int) -> Agent:
+        name = self.p1_name if number == 1 else self.p2_name
+        if name == AgentTypes.human.value:
+            agent: Agent = HumanAgent()
+        elif name == AgentTypes.random.value:
+            agent = RandomAgent()
+        elif name == AgentTypes.searcher.value:
+            agent = ExhaustiveSearchAgent(
+                self.database, player_number=number, logger=self.logger
+            )
+        else:
+            raise ValueError(f"No agent {name}")
+        return agent
 
+    def _play_one(self):
+        self.reset()
+        p1_turn = True
 
-def play_and_print_result(p1_agent: Agent, p2_agent: Agent):
-    board = play_game(p1_agent, p2_agent)
-    print_game_result(board)
+        while not self.board.is_finished():
+            self.board.log()
+            player = self.p1 if p1_turn else self.p2
+            p1_turn = not p1_turn
+            action = player.get_action(self.board)
+            self.board.make_move(action)
 
+    def reset(self) -> None:
+        self.board = Board()
 
-def play_game(p1: Agent, p2: Agent) -> Board:
-    board = Board()
-    p1_turn = True
+    def print_result(self) -> None:
+        winner = self.board.outcome
+        self.board.log()
+        if winner == GameOutcome.DRAW:
+            self.logger.log("Draw!", force=True)
+        else:
+            self.logger.log(f"{winner.value} wins!", force=True)
 
-    while not board.is_finished():
-        board.log()
-        player = p1 if p1_turn else p2
-        p1_turn = not p1_turn
-        action = player.get_action(board)
-        board.make_move(action)
-
-    return board
-
-
-def print_game_result(board: Board):
-    winner = board.get_winner()
-    board.log()
-    if winner == GameOutcome.DRAW:
-        logging.info("Draw!")
-    else:
-        logging.info("%s wins!", winner.value)
+    @property
+    def agents(self) -> Tuple[Agent, Agent]:
+        return self.p1, self.p2

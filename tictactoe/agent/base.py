@@ -35,6 +35,9 @@ class Agent(ABC):
     def agent_type(self) -> AgentTypes:
         pass
 
+    def is_trainable(self) -> bool:
+        return False
+
 
 class TrainableAgent(Agent):
     def __init__(self, db: Database, logger: TrainingLogger = None) -> None:
@@ -48,7 +51,7 @@ class TrainableAgent(Agent):
         self.logger.start_training()
 
         action = self._train(board)
-        
+
         self.is_training = False
 
         return action
@@ -56,3 +59,6 @@ class TrainableAgent(Agent):
     @abstractmethod
     def _train(self, board: Board = None) -> int:
         pass
+
+    def is_trainable(self) -> bool:
+        return True
