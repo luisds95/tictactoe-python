@@ -10,11 +10,13 @@ from tictactoe.log.logger import TrainingLogger
 @click.command()
 @click.argument("P1", default="human")
 @click.argument("P2", default="random")
-@click.option("-n", default=1, help="Number of games to play", type=int)
+@click.option("--n-games", default=1, help="Number of games to play", type=int)
 @click.option("--loud/--quiet", default=None, help="Level of verbosity")
 @click.option("--train/--no-train", help="Should train non-human players")
 @click.option("--database", default="states.json", type=str)
-def main(p1: str, p2: str, n: int, loud: bool, train: bool, database: str) -> None:
+def main(
+    p1: str, p2: str, n_games: int, loud: bool, train: bool, database: str
+) -> None:
     """
     Play a tic tac toe game. Possible players: human, random, searcher
     """
@@ -35,4 +37,4 @@ def main(p1: str, p2: str, n: int, loud: bool, train: bool, database: str) -> No
         else:
             raise AgentIsNotTrainableError
     else:
-        game.play(n=n)
+        game.play(n=n_games)
