@@ -3,6 +3,7 @@ import logging
 import click
 
 from tictactoe.agent import AgentIsNotTrainableError, TrainableAgent
+from tictactoe.environment import DICT_DATABASE_FILE
 from tictactoe.game.play import Game
 from tictactoe.log.logger import TrainingLogger
 
@@ -13,7 +14,7 @@ from tictactoe.log.logger import TrainingLogger
 @click.option("--n-games", default=1, help="Number of games to play", type=int)
 @click.option("--loud/--quiet", default=None, help="Level of verbosity")
 @click.option("--train/--no-train", help="Should train non-human players")
-@click.option("--database", default="states.json", type=str)
+@click.option("--database", default=str(DICT_DATABASE_FILE), type=str)
 def main(
     p1: str, p2: str, n_games: int, loud: bool, train: bool, database: str
 ) -> None:
