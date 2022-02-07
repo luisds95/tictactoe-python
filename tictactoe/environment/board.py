@@ -123,7 +123,7 @@ class Board:
 
     def search_for_winner_in_columns(self) -> GameOutcome:
         for column in range(N_ROWS):
-            if (
+            if self.state[column] != "0" and (
                 self.state[column]
                 == self.state[column + N_ROWS]
                 == self.state[column + N_ROWS * 2]

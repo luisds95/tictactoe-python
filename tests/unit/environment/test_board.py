@@ -78,6 +78,7 @@ def test_make_move(
         ["121120000", GameOutcome.NA],
         ["121121212", GameOutcome.DRAW],
         ["122120100", GameOutcome.P1],
+        ["012012010", GameOutcome.P1],
         ["021021120", GameOutcome.P2],
         ["111202000", GameOutcome.P1],
         ["101222100", GameOutcome.P2],
@@ -89,6 +90,7 @@ def test_make_move(
         "ongoing",
         "no-winner",
         "vertical-p1",
+        "vertical-p1[2]",
         "vertical-p2",
         "horizonal-p1",
         "horizontal-p2",
@@ -99,6 +101,20 @@ def test_make_move(
 def test_outcome(state: str, expected_winner: GameOutcome):
     board = Board(state)
     assert board.outcome == expected_winner
+
+
+@pytest.mark.parametrize(
+    "state,outcome,move,next_outcome",
+    [
+        ["011021002", GameOutcome.NA, 0, GameOutcome.P2]
+    ]
+)
+def test_outcome_changes_when_making_move(state: str, outcome: GameOutcome, move: int, next_outcome: GameOutcome):
+    board = Board(state)
+    assert board.outcome == outcome
+
+    board.make_move(move)
+    assert board.outcome == next_outcome
 
 
 def test_log_can_execute():
