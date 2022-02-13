@@ -1,5 +1,4 @@
 import logging
-
 import click
 
 from tictactoe.agent import AgentIsNotTrainableError, TrainableAgent
@@ -8,14 +7,19 @@ from tictactoe.game.play import Game
 from tictactoe.log.logger import TrainingLogger
 
 
-@click.command()
+@click.group()
+def main():
+    pass
+
+
+@main.command()
 @click.argument("P1", default="human")
 @click.argument("P2", default="random")
 @click.option("--n-games", default=1, help="Number of games to play", type=int)
 @click.option("--loud/--quiet", default=None, help="Level of verbosity")
 @click.option("--train/--no-train", help="Should train non-human players")
 @click.option("--database", default=str(DICT_DATABASE_FILE), type=str)
-def main(
+def play(
     p1: str, p2: str, n_games: int, loud: bool, train: bool, database: str
 ) -> None:
     """
@@ -39,3 +43,9 @@ def main(
             raise AgentIsNotTrainableError
     else:
         game.play(n=n_games)
+
+
+@main.command()
+def start_api():
+    from tictactoe.app import app
+    app.run()
