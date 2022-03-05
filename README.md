@@ -1,6 +1,12 @@
 # tictactoe-python
 Tic-Tac-Toe solved with Reinforcement Learning in Python!
 
+![TicTacToe in Python](assets/p2-wins.PNG)
+
+Play live at [luisdasilva.io/tictactoe](https://luisdasilva.io/tictactoe)
+
+Checkout the UI at [tictactoe-ui](https://github.com/luisds95/tictactoe-ui)
+
 ## Pre-requisites
 To play TicTacToe, you must have installed:
 
