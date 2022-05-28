@@ -11,8 +11,6 @@ class InMemoryDatabase(Database):
 
     @property
     def data(self) -> Dict[str, dict]:
-        if len(self._data) == 0:
-            self.connect()
         return self._data
 
     def connect(self) -> None:

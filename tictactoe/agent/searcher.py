@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import Dict, Optional, Union
 
 import numpy as np
 
@@ -18,7 +18,7 @@ class ExhaustiveSearchAgent(TrainableAgent):
         self,
         db: Database,
         player_number: Union[int, str],
-        logger: TrainingLogger = None,
+        logger: Optional[TrainingLogger] = None,
         max_depth: int = -1,
         commit_freq: int = 1000,
     ) -> None:
@@ -31,7 +31,7 @@ class ExhaustiveSearchAgent(TrainableAgent):
     def agent_type(self) -> AgentTypes:
         return AgentTypes.searcher
 
-    def _train(self, board: Board = None) -> int:
+    def _train(self, board: Optional[Board] = None) -> int:
         board = Board() if board is None else board
         action = self.get_action(board)
         self.db.commit()
@@ -86,6 +86,9 @@ class ExhaustiveSearchAgent(TrainableAgent):
         return values
 
     def _update_database(self, board: Board, values: Dict[int, int]) -> None:
+        if self.db.get(board, None) == values:
+            return
+
         self.db.update(board, values)
         if self.db.size() % self.commit_freq == 0:
             self.db.commit()

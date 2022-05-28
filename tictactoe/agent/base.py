@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod, abstractproperty
+from datetime import datetime
 from typing import Optional, Union
 
 from tictactoe.agent.enums import AgentTypes
@@ -32,27 +33,29 @@ class Agent(ABC):
         pass
 
     @abstractproperty
-    def agent_type(self) -> AgentTypes:
+    def agent_type(self) -> AgentTypes:  # type: ignore
         pass
 
 
 class TrainableAgent(Agent):
-    def __init__(self, db: Database, logger: TrainingLogger = None) -> None:
+    def __init__(self, db: Database, logger: Optional[TrainingLogger] = None) -> None:
         super().__init__()
         self.db = db
         self.is_training = False
         self.logger = TrainingLogger(frequency=0) if logger is None else logger
 
-    def train(self, board: Board = None) -> int:
+    def train(self, board: Optional[Board] = None) -> int:
+        start = datetime.now()
         self.is_training = True
         self.logger.start_training()
 
         action = self._train(board)
 
         self.is_training = False
+        print("Finished training in", datetime.now() - start)
 
         return action
 
     @abstractmethod
-    def _train(self, board: Board = None) -> int:
+    def _train(self, board: Optional[Board] = None) -> int:
         pass

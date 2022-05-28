@@ -15,6 +15,7 @@ from tictactoe.environment import Board
         ["010221120", {0: 0, 2: 1, 8: 0}],
         ["010221100", {0: -1, 2: 0, 7: -1, 8: 0}],
         ["010221000", {0: 0, 2: 1, 6: 0, 7: -1, 8: 0}],
+        ["000202110", {0: -1, 1: -1, 2: -1, 4: 1, 8: 1}],
     ],
 )
 def test_exhaustive_search_agent_evaluates_moves_correctly(

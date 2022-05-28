@@ -1,4 +1,5 @@
 import logging
+
 import click
 
 from tictactoe.agent import AgentIsNotTrainableError, TrainableAgent
@@ -25,7 +26,7 @@ def play(
     """
     Play a tic tac toe game. Possible players: human, random, searcher
     """
-    frequency = 1 if loud else 10000
+    frequency = 1 if loud else 1000
     logger = TrainingLogger(frequency=frequency, handler=click.echo)
 
     if loud or "human" in (p1, p2):
@@ -48,4 +49,5 @@ def play(
 @main.command()
 def start_api():
     from tictactoe.app import app
+
     app.run()

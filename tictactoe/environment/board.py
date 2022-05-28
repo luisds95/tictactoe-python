@@ -16,7 +16,7 @@ N_ROWS = 3
 class Board:
     TOTAL_POSITIONS = factorial(9)
 
-    def __init__(self, state: Union[list, str] = None) -> None:
+    def __init__(self, state: Union[list, str, None] = None) -> None:
         self.state = list("000000000") if state is None else list(state)
         self.moves = self.get_moves()
         self.validate_state()
@@ -133,7 +133,10 @@ class Board:
 
     def search_for_winner_in_rows(self) -> GameOutcome:
         for row in range(0, N_ROWS ** 2, N_ROWS):
-            if self.state[row] == self.state[row + 1] == self.state[row + 2]:
+            if (
+                self.state[row] != "0"
+                and self.state[row] == self.state[row + 1] == self.state[row + 2]
+            ):
                 return GameOutcome(self.state[row])
         return GameOutcome.NA
 

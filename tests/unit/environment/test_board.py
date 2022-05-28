@@ -81,6 +81,7 @@ def test_make_move(
         ["012012010", GameOutcome.P1],
         ["021021120", GameOutcome.P2],
         ["111202000", GameOutcome.P1],
+        ["000202111", GameOutcome.P1],
         ["101222100", GameOutcome.P2],
         ["122012101", GameOutcome.P1],
         ["112120200", GameOutcome.P2],
@@ -93,6 +94,7 @@ def test_make_move(
         "vertical-p1[2]",
         "vertical-p2",
         "horizonal-p1",
+        "horizonal-p1[2]",
         "horizontal-p2",
         "right-diagonal",
         "left-diagonal",
@@ -105,11 +107,11 @@ def test_outcome(state: str, expected_winner: GameOutcome):
 
 @pytest.mark.parametrize(
     "state,outcome,move,next_outcome",
-    [
-        ["011021002", GameOutcome.NA, 0, GameOutcome.P2]
-    ]
+    [["011021002", GameOutcome.NA, 0, GameOutcome.P2]],
 )
-def test_outcome_changes_when_making_move(state: str, outcome: GameOutcome, move: int, next_outcome: GameOutcome):
+def test_outcome_changes_when_making_move(
+    state: str, outcome: GameOutcome, move: int, next_outcome: GameOutcome
+):
     board = Board(state)
     assert board.outcome == outcome
 

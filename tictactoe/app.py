@@ -4,7 +4,12 @@ from flask import Flask, request
 
 from tictactoe.agent import ExhaustiveSearchAgent
 from tictactoe.database import DictDatabase
-from tictactoe.environment import DICT_DATABASE_FILE, Board, InvalidBoardError, GameOutcome
+from tictactoe.environment import (
+    DICT_DATABASE_FILE,
+    Board,
+    GameOutcome,
+    InvalidBoardError,
+)
 
 app = Flask(__name__)
 database = DictDatabase(DICT_DATABASE_FILE)
@@ -40,5 +45,5 @@ def get_action() -> str:
         response = {"action": action, "result": board.outcome.name}
     else:
         response = {"result": board.outcome.name}
-    
+
     return json.dumps(response)

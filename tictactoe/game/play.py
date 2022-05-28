@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Tuple
+from typing import Optional, Tuple
 
 from tictactoe.agent import (
     Agent,
@@ -18,8 +18,8 @@ class Game:
         self,
         p1_name: str,
         p2_name: str,
-        database_str: str = None,
-        logger: TrainingLogger = None,
+        database_str: Optional[str] = None,
+        logger: Optional[TrainingLogger] = None,
     ) -> None:
         self.p1_name = p1_name.lower()
         self.p2_name = p2_name.lower()
