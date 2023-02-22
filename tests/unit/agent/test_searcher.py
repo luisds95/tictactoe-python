@@ -33,9 +33,11 @@ def test_exhaustive_search_agent_evaluates_moves_correctly(
 @pytest.mark.parametrize(
     "state,expected",
     [
-        ["112122000", 6],
-        ["010221120", 2],
-        ["010221000", 2],
+        ["112122000", 6],  # P1
+        ["010221120", 2],  # P1
+        ["010221000", 2],  # P1
+        ["100000000", 4],  # P2
+        ["112120000", 6],  # P2
     ],
 )
 def test_exhaustive_search_agent_gets_best_action(state: str, expected: int):

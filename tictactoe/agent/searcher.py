@@ -42,10 +42,7 @@ class ExhaustiveSearchAgent(TrainableAgent):
         if values is None:
             values = self.evaluate_moves(board)
 
-        if self.player_number == GameOutcome.P1:
-            return max(values, key=lambda move: values[move])
-        else:
-            return min(values, key=lambda move: values[move])
+        return max(values, key=lambda move: values[move])
 
     def evaluate_moves(self, board: Board) -> Dict[int, int]:
         return self._evaluate_moves(board, current_depth=0)
