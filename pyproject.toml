@@ -4,11 +4,13 @@ version = "0.1.0"
 description = "TicTacToe, solved with Reinforcement Learning"
 authors = ["Luis Da Silva <luisdanield@gmail.com>"]
 license = "MIT"
+packages = [
+    { include = "tictactoe" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
 click = "^8.0.3"
-numpy = "^1.22.1"
 Flask = "^2.0.2"
 gunicorn = "^20.1.0"
 

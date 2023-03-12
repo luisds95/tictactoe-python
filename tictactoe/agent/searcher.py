@@ -1,7 +1,5 @@
 from typing import Dict, Optional, Union
 
-import numpy as np
-
 from tictactoe.agent.base import TrainableAgent
 from tictactoe.agent.enums import AgentTypes
 from tictactoe.database import Database
@@ -28,6 +26,7 @@ class ExhaustiveSearchAgent(TrainableAgent):
 
         self.set_player_number(player_number)
 
+    @property
     def agent_type(self) -> AgentTypes:
         return AgentTypes.searcher
 
@@ -66,9 +65,9 @@ class ExhaustiveSearchAgent(TrainableAgent):
                         ).values()
                     ]
                     values[move] = (
-                        np.max(future_values)
+                        max(future_values)
                         if new_board.next_player == self.player_number.value
-                        else np.min(future_values)
+                        else min(future_values)
                     )
             elif new_board.outcome == GameOutcome.DRAW:
                 values[move] = self.DRAW_REWARD

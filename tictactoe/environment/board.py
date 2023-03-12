@@ -132,7 +132,7 @@ class Board:
         return GameOutcome.NA
 
     def search_for_winner_in_rows(self) -> GameOutcome:
-        for row in range(0, N_ROWS ** 2, N_ROWS):
+        for row in range(0, N_ROWS**2, N_ROWS):
             if (
                 self.state[row] != "0"
                 and self.state[row] == self.state[row + 1] == self.state[row + 2]
