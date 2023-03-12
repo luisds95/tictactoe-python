@@ -4,7 +4,6 @@ from typing import Any, Dict
 from tictactoe.database import DictDatabase
 from tictactoe.environment import DICT_DATABASE_FILE, Board, InvalidBoardError
 from tictactoe.game import get_move_response
-from pathlib import Path
 
 
 def move_handler(event: Dict[str, Any], context: Dict[str, Any]) -> str:
